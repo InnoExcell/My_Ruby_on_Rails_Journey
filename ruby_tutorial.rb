@@ -232,8 +232,13 @@ if File.exist? 'temp.txt'
 end
 
 puts "-----------------"
-# Writing to a file
+# Writing to a new file: note, file test1.txt was non-existent before.
+# File.open automatically creates it.
 
+File.open("test1.txt", "w") do |file|
+	file.puts "One line"
+	file.puts "Another"
+end
 
 
 
