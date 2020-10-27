@@ -1,5 +1,6 @@
 # My_Ruby_on_Rails_Journey
-<<<<<<< HEAD
+
 =======
-# This repository contains many useful code examples for Ruby Language Practice.
->>>>>>> ab8cbd3d3464da07e0a1b26466d06b947733dda2
+This repository contains many useful code examples for Ruby Language Practice.
+
+Please check out John Hopkins University Repository: https://github.com/jhu-ep-coursera to follow along the code examples.
