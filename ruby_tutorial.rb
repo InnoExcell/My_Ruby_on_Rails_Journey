@@ -241,4 +241,48 @@ File.open("test1.txt", "w") do |file|
 end
 
 
+# Environment Variables
 
+puts ENV["EDITOR"]
+
+#Strings / Interpolation
+
+single_quoted = 'ice cream \n followed by it\'s a party!'
+double_quoted = "ice cream \n followed by it\'s a party!"
+
+puts single_quoted
+puts double_quoted
+
+# Interpolation (only available in double-quoted strings)
+def multiply (one, two)
+	"#{one} multiplied by #{two} equals #{one * two}"	
+end
+puts multiply(5, 3)
+
+# More Strings
+
+my_name = " tim"
+puts my_name.lstrip.capitalize # changes the first letter in name to capital
+p my_name # shows the original string ignoring the capitalize command in 265
+my_name.lstrip! # (desctructive) removes the leading space
+my_name[0] = 'K' # replace the first character
+puts my_name
+
+# %Q{} is used for multiple lines string + functions like double-quoted string
+cur_weather = %Q{It's a hot day outside
+				Grab your umbrellas...}
+
+puts cur_weather
+
+cur_weather.lines do |line|
+	line.sub! 'hot', 'rainy' # substitutes 'hot' with 'rainy'
+	puts "#{line.strip}"
+end  
+
+# Strings API (https://ruby-doc.org/core-2.7.2/String.html)
+
+# include? other_str => true or false
+
+"hello".include? "lo" #=> true
+"hello".include? "ol" #=> false
+"hello".include? ?h #=> true
