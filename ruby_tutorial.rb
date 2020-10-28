@@ -684,6 +684,172 @@ elig_players = red_team.select {|player| (14..20) === player.age }.reject {|play
 puts elig_players
 puts "---------------------------"
 
+# Scope of Variables
+
+v1 = "outside"
+
+class MyClass
+	def my_method
+		#p v1 # Exception Thrown - no such variable exists
+		v1 = "inside"
+		p v1
+		p local_variables
+	end
+end
+
+p v1 # => outside
+obj = MyClass.new
+obj.my_method # => inside
+			  # => [:v1]
+p local_variables # => [:v1, :obj]
+p self # => main
+
 puts "---------------------------"
 
+# Scope of Constants
+
+module Test 
+	PI = 3.14
+	class Test2
+		def what_is_pi
+			puts PI
+		end
+	end
+end
+Test::Test2.new.what_is_pi
+
+
+module MyModule
+	MyConstant = 'Outer Constant'
+	class MyClass
+		puts MyConstant # => Outer Constant
+		MyConstant = 'Inner Constant'
+		puts MyConstant # => Inner Constant
+	end
+	puts MyConstant # => Outer Constant
+end
+
+puts "---------------------------"
+
+# Scope of Blocks
+
+class BankAccount
+	attr_accessor :id, :amount
+	def initialize(id, amount)
+		@id = id
+		@amount = amount
+	end
+end
+
+acct1 = BankAccount.new(123, 200)
+acct2 = BankAccount.new(321, 100)
+acct3 = BankAccount.new(421, -100)
+accts = [acct1, acct2, acct3]
+
+total_sum = 0
+accts.each do |eachAcct|
+	total_sum += eachAcct.amount
+end
+
+puts total_sum # => 200
+		
+
+puts "---------------------------"
+
+# Block: Local Scope
+
+arr = [5, 4, 1]
+cur_number = 10
+arr.each do |each_number|
+	some_var = 10 # NOT available outside the block
+	print each_number.to_s + " " # => 5 4 1
+end
+puts # print a blank line
+
+puts cur_number # => 10
+
+adjustment = 5
+arr.each do |cur_number;adjustment|
+	adjustment = 10
+	print "#{cur_number + adjustment} " # => 15 14 11
+end
+puts 
+puts adjustment # => 5 (Not affected by the block)
+
+puts "---------------------------"
+
+# Encapsulation
+
+class Car 
+	def initialize(speed, comfort)
+		@rating = speed * comfort
+	end
+
+	# Can't SET rating from outside
+	def rating
+		@rating
+	end
+end
+
+puts Car.new(4, 5).rating # => 20
+
+puts "---------------------------"
+
+# Specifying Access Control
+
+class MyAlgorithm
+	private 
+		def test1
+			"Private"		
+		end
+	protected
+		def test2
+			"Protected"
+		end
+	public
+		def public_again
+			"Public"
+		end
+end
+
+class Another
+	def test1
+		"Private, as declared later on"
+	end
+	private :test1
+end
+
+
+puts "---------------------------"
+# Sum of Two Numbers
+
+def two_sums(first_num, second_num)
+	"the sum of #{first_num} and #{second_num} equals #{first_num + second_num}"
+end
+puts two_sums(15, 20)
+
+puts "---------------------------"
+
+# Private Access
+
+class Person 
+	def initialize(age)
+		self.age = age # Legal -Exception
+		puts my_age
+		#puts self.my_age 	# ILLEGAL
+							# CANNOT USE self or any other receiver
+	end
+
+	private 
+		def my_age
+			@age
+		end
+		def age=(age)
+			@age = age
+		end
+end
+
+puts "---------------------------"
+puts "---------------------------"
+puts "---------------------------"
 
