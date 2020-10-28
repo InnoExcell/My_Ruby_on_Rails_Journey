@@ -286,3 +286,404 @@ end
 "hello".include? "lo" #=> true
 "hello".include? "ol" #=> false
 "hello".include? ?h #=> true
+
+puts "---------------------------"
+# ARRAYS
+
+# Arrays allow Heterogeneous Types
+
+het_arr = [1, "two", :three] # heterogeneous types
+puts het_arr[1] 
+
+puts "---------------------------"
+
+arr_words = %w{ what a great day today! }
+puts arr_words[-2] # => day
+puts "#{arr_words.first} - #{arr_words.last}"
+p arr_words[-3, 2] #go back three elements from right and take two element
+
+puts "---------------------------"
+
+# (Range type covered later...)
+p arr_words[2..4]
+
+puts "---------------------------"
+
+# Make a String out of array elements separated by 'space'
+puts arr_words.join(' ')
+
+puts "---------------------------"
+
+# Modifying Arrays
+
+# You want a stack (LIFO: Last In First Out)? Sure
+stack = []; stack << "one"
+stack.push ("two")
+
+puts stack
+puts stack.pop
+puts stack
+
+puts "---------------------------"
+
+# You need a queue (FIFO: First In First Out)? We have those too...
+
+a = [5,3,4,2].sort!.reverse!
+p a #(this actually modified the array)
+p a.sample(2) # => prints 2 random elements
+
+a[6] = 33
+p a 
+
+puts "---------------------------"
+
+# Array Processing
+
+a = [1, 3, 4, 7, 8, 10]
+a.each { |num| print num } #(no new line)
+puts a # (inserts new line after each element)
+
+
+puts "---------------------------"
+
+new_arr = a.select { |num| num > 4 }
+p new_arr # => [7, 8, 10]
+new_arr = a.select { |num| num < 10 }.reject{ |num| num.even? }
+p new_arr
+
+puts "---------------------------"
+
+# Multiply each element by 6 producing new array
+new_arr = a.map { |x| x * 6 }
+p new_arr
+
+puts "---------------------------"
+
+# RANGES
+
+some_range = 1..3
+puts some_range.max
+puts some_range.include? 2
+
+puts "---------------------------"
+
+puts (1...10) === 10 # => false (end-exclusive)
+puts ('a'...'r') === "b" # => true
+
+puts "---------------------------"
+
+p ('k'..'z').to_a.sample(3) # => ["l", "p", "u"]  or any other random array with 3 letters in range
+
+puts "---------------------------"
+
+age = 7
+case
+	when 0..12 then puts "Still a baby"
+	when 13..99 then puts "Teenager at heart!"
+	else puts "You are getting older..."
+end
+
+puts "---------------------------"
+
+# HASHES
+
+editor_props = { "font" => "Arial", "size" => 12, "color" => "red"}
+
+# THE ABOVE IS NOT A BLOCK - IT'S A HASH
+puts editor_props.length 
+puts editor_props["font"]
+
+editor_props["background"] = "Blue"
+editor_props.each_pair do |key, value|
+	puts "Key: #{key}, Value: #{value}."
+end
+
+puts "---------------------------"
+
+# Hashes cont'd Accessing Values in Hash for non existent entry
+
+word_frequency = Hash.new(0)
+
+sentence = "Chicka chicka boom boom"
+sentence.split.each do |word|
+	word_frequency[word.downcase] += 1
+end
+
+p word_frequency # => {"chicka" => 2, "boom" => 2}
+
+puts "---------------------------"
+
+# Hash examples showing that order of entry is preserved and when hash is used as last arguement to a method, {} are optional.
+
+family_tree_19 = {oldest: "Jim", older: "Joe", younger: "Jack"}
+family_tree_19[:youngest] = "Jeremy"
+p family_tree_19
+puts "---------------------------"
+
+# Named parameter "like" behavior...
+
+def adjust_colors (props = {foreground: "red", background: "white"})
+	puts "Foreground: #{props[:foreground]}" if props[:foreground]
+	puts "Background: #{props[:background]}" if props[:background]
+end
+adjust_colors
+puts "---------------------------"
+
+adjust_colors ({ :foreground => "green"})
+adjust_colors background: "yella"
+adjust_colors :background => "magenta"
+
+puts "---------------------------"
+
+#BLOCK AND HASH CONFUSION
+
+# Let's say you have a Hash
+a_hash = { :one => "one"}
+
+# Then, you output it
+puts a_hash # => {:one=>"one"}
+
+# Doing it one step throws a SyntaxError
+# puts { :one => "one"}
+
+# Reason: Ruby confuses the {} for a block
+
+# Fix: Use Parens ()
+puts ({ :one => "one" }) # => {:one=>"one"}
+
+# Or drop the {} altogether...
+puts one: "one" # => {:one=>"one"} 
+
+
+puts "---------------------------"
+
+# OBJECT CREATION
+
+class Persons
+	def initialize (name, age) # "Constructor"
+		@name = name
+		@age = age		
+	end
+	def get_info
+		@additional_info = "Interesting"
+		"Name: #{@name}, age: #{@age}"		
+	end
+end
+
+person1 = Persons.new("Joe", 14)
+p person1.instance_variables # [:@name, :@age]
+puts person1.get_info 
+p person1.instance_variables
+
+puts "---------------------------"
+
+# ACCESSING DATA
+
+class Somebody
+	def initialize (name, age) # "Constructor"
+		@name = name
+		@age = age		
+	end
+	def name
+		@name
+	end
+	def name= (new_name)
+		@name = new_name
+	end
+end
+
+person1 = Somebody.new("Joe", 14)
+puts person1.name # Joe
+person1.name = "Mike"
+puts person1.name # Mike
+# puts person1.age # undefined method 'age' for #<Person:
+
+puts "---------------------------"
+
+class Person
+	attr_accessor :name, :age # getters and setters for name and age
+end
+
+person1 = Person.new
+p person1.name # => nil
+person1.name = "Mike"
+person1.age = 15
+puts person1.name # => Mike
+puts person1.age # => 15
+person1.age = "fifteen"
+puts person1.age # => fifteen	
+
+puts "---------------------------"
+
+# SELF
+
+class Person
+	attr_reader :age
+	attr_accessor :name
+
+	def initialize (name, ageVar) # CONSTRUCTOR
+		@name = name
+		self.age = ageVar # call the age= method
+		puts age		
+	end
+	def age= (new_age)
+		@age = new_age unless new_age > 120			
+	end
+end
+
+person1 = Person.new("Kim", 13) # => 13
+puts "My age is #{person1.age}" # => My age is 13
+person1.age = 130 # Try to change the age
+puts person1.age # => 13 (The setter didn't allow the change)
+
+puts "---------------------------"
+
+# Class Inheritance
+
+# Double Pipe || Operator
+
+class Person
+	attr_reader :age
+	attr_accessor :name
+
+
+	def initialize (name, age) # CONSTRUCTOR
+		@name = name
+		self.age = age # call the age= method
+	end
+	def age= (new_age)
+		@age ||= 5 # default
+		@age = new_age unless new_age > 120
+	end
+end
+person1 = Person.new("Kim", 130)
+puts person1.age # => 5 (Defualt)
+person1.age = 10 # => change to 10
+puts person1.age # => 10
+person1.age = 200 # => Tries to change to 200
+puts person1.age # => 10 (refuses the change cos of the new_age condition)
+
+
+puts "---------------------------"
+
+# Class Methods and Variables
+
+class MathFunctions
+	def self.double(var) #1. Using self 		
+		times_called
+		var * 2
+	end
+	class << self #2. Using << self
+		def times_called
+			@@times_called ||= 0
+			@@times_called += 1
+		end
+	end
+end
+def MathFunctions.triple(var) #3. Outside of class
+	times_called
+	var * 3
+end
+
+# No instance created
+puts MathFunctions.double 5 # => 10
+puts MathFunctions.triple(3) # => 9
+puts MathFunctions.times_called # => 3
+
+
+puts "---------------------------"
+# Inheritance
+
+class Dog
+	def to_s
+		"Dog"
+	end
+	def bark
+		"barks loudly"
+	end
+end
+class SmallDog < Dog
+	def bark # Override
+		"barks quietly"
+	end
+end
+
+dog = Dog.new # (btw, new is a class method)
+small_dog = SmallDog.new
+puts "#{dog}1 #{dog.bark}" # => Dog1 barks loudly
+puts "#{small_dog}2 #{small_dog.bark}" # => Dog2 barks quietly
+
+puts "---------------------------"
+
+# Module as Namespace
+
+module Sports
+	class Match
+		attr_accessor :score
+	end
+end
+
+module Patterns
+	class Match
+		attr_accessor :complete
+	end
+end
+
+match1 = Sports::Match.new  # (Note the use of :: operator)
+match1.score = 45 
+puts match1.score # => 45
+
+match2 = Patterns::Match.new
+match2.complete = true
+puts match2.complete # => true
+
+puts "---------------------------"
+
+# Module as Mixin
+
+module SayMyName
+	attr_accessor :name
+	def print_name
+		puts "Name: #{@name}"
+	end
+end
+
+class Individual
+	include SayMyName
+end
+class Company
+	include SayMyName
+end
+
+individual = Individual.new
+individual.name = "Joe"
+individual.print_name # => Name: Joe
+company = Company.new
+company.name = "The Circumspect Ltd"
+company.print_name # => Name: The Circumspect Ltd"
+
+
+puts "---------------------------"
+# Enumerable in Action
+
+require_relative 'player'
+require_relative 'team'
+
+player1 = Player.new("Bob", 13, 5)
+player2 = Player.new("Jim", 15, 4.5)
+player3 = Player.new("Mike", 21, 5)
+player4 = Player.new("Joe", 14, 5)
+player5 = Player.new("Scott", 16, 3)
+
+red_team = Team.new("Red")
+red_team.add_players(player1, player2, player3, player4, player5) # (splat)
+
+# select only players betweeen 14 and 20 and reject any player below 4.5 skill-level
+elig_players = red_team.select {|player| (14..20) === player.age }.reject {|player| player.skill_level < 4.5}
+
+puts elig_players
+puts "---------------------------"
+
+puts "---------------------------"
+
+
